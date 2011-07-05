@@ -1,6 +1,5 @@
-html * {
-    margin: 0;
-    /*padding: 0; SELECT NOT DISPLAYED CORRECTLY IN FIREFOX */
+* {
+    margin: 0; /*padding: 0; SELECT NOT DISPLAYED CORRECTLY IN FIREFOX */
 }
 
 /* GENERAL */
@@ -11,13 +10,13 @@ html * {
     right: 0;
 }
 
-body {
-    background: #fff;
+html, body {
+    background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#000));
+    /*background: white;*/
     color: #333;
     font: 11px verdana, arial, helvetica, sans-serif;
-}
-#grailsLogo {
-	padding:10px;
+    text-align: left;
+    height:100%;
 }
 
 a:link, a:visited, a:hover {
@@ -27,10 +26,9 @@ a:link, a:visited, a:hover {
 }
 
 h1 {
-    color: #48802c;
+/*color: #666666;*/
     font-weight: normal;
-    font-size: 16px;
-    margin: .8em 0 .3em 0;
+    font-size: 16px; /*margin: .8em 0 .3em 0;*/
 }
 
 ul {
@@ -43,15 +41,16 @@ input, select, textarea {
     font: 11px verdana, arial, helvetica, sans-serif;
     margin: 2px 0;
     padding: 2px 4px;
-    max-width: 200px;
 }
+
 select {
-   padding: 2px 2px 2px 0;
+    padding: 2px 2px 2px 0;
 }
+
 textarea {
-	width: 250px;
-	height: 150px;
-	vertical-align: top;
+    width: 250px;
+    height: 150px;
+    vertical-align: top;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -59,8 +58,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .body {
-    float: left;
-    margin: 0 15px 10px 15px;
+    /*float: left;*/
+    margin: 0 15px 0px 15px;
 }
 
 /* NAVIGATION MENU */
@@ -69,7 +68,8 @@ input:focus, select:focus, textarea:focus {
     background: #fff url(../images/skin/shadow.jpg) bottom repeat-x;
     border: 1px solid #ccc;
     border-style: solid none solid none;
-    margin-top: 5px;
+    margin-bottom: 16px;
+    margin-top: 0px;
     padding: 7px 12px;
 }
 
@@ -77,20 +77,36 @@ input:focus, select:focus, textarea:focus {
     font-size: 10px;
     padding: 0 5px;
 }
+
 .menuButton a {
     color: #333;
     padding: 4px 6px;
 }
+
 .menuButton a.home {
     background: url(../images/skin/house.png) center left no-repeat;
     color: #333;
     padding-left: 25px;
 }
+
 .menuButton a.list {
     background: url(../images/skin/database_table.png) center left no-repeat;
     color: #333;
     padding-left: 25px;
 }
+
+.menuButton a.export {
+    background: url(../images/pdf.png) center left no-repeat;
+    color: #333;
+    padding-left: 25px;
+}
+
+.menuButton a.logout {
+    background: url(../images/key_go.png) center left no-repeat;
+    color: #333;
+    padding-left: 25px;
+}
+
 .menuButton a.create {
     background: url(../images/skin/database_add.png) center left no-repeat;
     color: #333;
@@ -114,12 +130,14 @@ div.errors {
     margin: 10px 0 5px 0;
     padding: 5px 0 5px 0;
 }
+
 div.errors ul {
     list-style: none;
     padding: 0;
 }
+
 div.errors li {
-	background: url(../images/skin/exclamation.png) 8px 0% no-repeat;
+    background: url(../images/skin/exclamation.png) 8px 0% no-repeat;
     line-height: 16px;
     padding-left: 30px;
 }
@@ -127,7 +145,12 @@ div.errors li {
 td.errors select {
     border: 1px solid red;
 }
+
 td.errors input {
+    border: 1px solid red;
+}
+
+td.errors textarea {
     border: 1px solid red;
 }
 
@@ -137,9 +160,11 @@ table {
     border: 1px solid #ccc;
     width: 100%
 }
+
 tr {
     border: 0;
 }
+
 td, th {
     font: 11px verdana, arial, helvetica, sans-serif;
     line-height: 12px;
@@ -147,18 +172,16 @@ td, th {
     text-align: left;
     vertical-align: top;
 }
+
 th {
     background: #fff url(../images/skin/shadow.jpg);
-    background-repeat:repeat-x;
-    background-size: 100%;
     color: #666;
     font-size: 11px;
     font-weight: bold;
     line-height: 17px;
     padding: 2px 6px;
-    
-
 }
+
 th a:link, th a:visited, th a:hover {
     color: #333;
     display: block;
@@ -167,25 +190,24 @@ th a:link, th a:visited, th a:hover {
     width: 100%;
 }
 
-th.notsortable {
-    font-size: 10px;
-}
-
 th.asc a, th.desc a {
     background-position: right;
     background-repeat: no-repeat;
 }
+
 th.asc a {
     background-image: url(../images/skin/sorted_asc.gif);
 }
+
 th.desc a {
     background-image: url(../images/skin/sorted_desc.gif);
 }
 
-.odd {
+.even {
     background: #f7f7f7;
 }
-.even {
+
+.odd {
     background: #fff;
 }
 
@@ -194,9 +216,11 @@ th.desc a {
 .list table {
     border-collapse: collapse;
 }
+
 .list th, .list td {
     border-left: 1px solid #ddd;
 }
+
 .list th:hover, .list tr:hover {
     background: #b2d1ff;
 }
@@ -206,13 +230,13 @@ th.desc a {
 .paginateButtons {
     background: #fff url(../images/skin/shadow.jpg) bottom repeat-x;
     border: 1px solid #ccc;
-/*    border-top: 0; */
+    border-top: 0;
     color: #666;
     font-size: 10px;
     overflow: hidden;
     padding: 10px 3px;
-    width: 100%;
 }
+
 .paginateButtons a {
     background: #fff;
     border: 1px solid #ccc;
@@ -221,6 +245,7 @@ th.desc a {
     margin: 0 3px;
     padding: 2px 6px;
 }
+
 .paginateButtons span {
     padding: 2px 3px;
 }
@@ -229,22 +254,19 @@ th.desc a {
 
 .dialog table {
     padding: 5px 0;
+    background-color: #fff;
 }
-
-.dialog  {
-	display: table;
-}
-
-
 
 .prop {
     padding: 5px;
 }
+
 .prop .name {
     text-align: left;
     width: 15%;
     white-space: nowrap;
 }
+
 .prop .value {
     text-align: left;
     width: 85%;
@@ -273,114 +295,99 @@ th.desc a {
     overflow: visible;
     padding: 2px 6px;
 }
+
 .buttons input.delete {
     background: transparent url(../images/skin/database_delete.png) 5px 50% no-repeat;
     padding-left: 28px;
 }
+
 .buttons input.edit {
     background: transparent url(../images/skin/database_edit.png) 5px 50% no-repeat;
     padding-left: 28px;
 }
+
 .buttons input.save {
     background: transparent url(../images/skin/database_save.png) 5px 50% no-repeat;
     padding-left: 28px;
 }
 
-
-
-/* HK changes */
-
-img {
-	border: 0;
+.wrapper {
+    background-color: white;
+    width: 800px;
+    min-height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    text-align:left;
 }
 
-fieldset {
-	border: 0;
+/*TODO: Display footer - currently hidden because of wrapper background */
+.footer{
+    width:800px; /* centered div must be given a width */
+    height:15px;
+    margin:-15px auto 0; /* -80px sucks it back in & auto centers it */
+    text-align:center;
+    font-weight:bold;
+    font-size: 8;
 }
 
-.checkbox {
-	border: 0;
-	text-align:center;
-	vertical-align: top;
+.mainBanner {
+    background: transparent url(../images/rpt-header-logo.png) 100% 100% repeat-x;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
 }
 
-.radio {
-	border: 0;
-	vertical-align: top;
-} 
-
-.number {
-	text-align:right;
-	vertical-align: top;
+.mainBannerLogo {
+    float: right;
 }
 
-.date {
-	text-align:right;
-	vertical-align: top;
+.mainBannerTitle {
+    float: left;
+    margin-left: 20px;
+    margin-top: 15px;
 }
 
-.mainnav {
-    margin-top: 5px;
-    padding: 5px 0;
-} 
-
-/* Tabbed menu */
-
-#tabs {
-	margin: 0 0 0px 0;
-	border-bottom: 1px solid #CCC; 
+.mainBanner h1 {
+    font-size: 2em;
+    font-weight: 100;
+    text-align: left;
+    margin: .8em 0 .3em 0;
 }
 
-#tabs ul {
-	list-style: none;
-	overflow: hidden;
-	font-size: 12px;
-	padding: 0 15px;
-	margin: 0 0 -1px 0;
+.dashboard {
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: #ffffff;
 }
 
-* html #tabs ul {
-	height: 1%;
+.dashboard table {
+    border: 0px;
 }
 
-#tabs ul li {
-	float: left;
-	padding: 0 5px 0 0;
+.dashboardSection {
+    margin-bottom: 16px;
 }
 
-#tabs ul li a {
-	display: block;
-	float: left;
-	padding: 5px 10px;
-	border-top: 1px solid #CCC;
-	border-left: 1px solid #CCC; 
-	border-right: 1px solid #CCC;
-	border-bottom: 1px solid #CCC; 
-	text-decoration: none; 
-	background: #f7f7f7;
-	-moz-border-radius-topleft: 7px;
-	border-top-left-radius: 7px;
-	-moz-border-radius-topright: 7px;
-	border-top-right-radius: 7px;
+.sectionHeading {
+    background: transparent url(../images/rpt-header.png) 100% 100% repeat;
 }
 
-#tabs ul li.active a {
-	border-bottom-color: #FFF; 
-	cursor: default;
-	font-weight: bold;  
-	color: #48802C;
-	background: #FFF;
+.sectionHeading h6 {
+    color: #fff;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 15px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-size: 16px;
 }
 
-#tabs ul li a:hover {
-	text-decoration: underline;
+.sectionContent {
+    padding: 16px;
+    border: 1px solid #a9a9a9
 }
 
-#tabs ul li.active a:hover {
-	border-bottom-color: #CCC;
-	text-decoration: none;  
+.listControls{
+    width:60px;
 }
-
-/* --------------------------- */
-
- 

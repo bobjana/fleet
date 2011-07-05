@@ -6,51 +6,31 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'branch.label', default: 'Branch')}" />
-        <title><g:message code="default.create.label" args="[entityName]" encodeAs="HTML"/></title>
+        <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
     <body>
         <div class="nav">
-            <span class="menuButton"><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" encodeAs="HTML" /></g:link></span>
+            <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
+            <span class="menuButton"><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
         </div>
         <div class="body">
-            <h1><g:message code="default.create.label" args="[entityName]" encodeAs="HTML" /></h1>
+            <h1><g:message code="default.create.label" args="[entityName]" /></h1>
             <g:if test="${flash.message}">
-            <div class="message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" encodeAs="HTML"/></div>
+            <div class="message">${flash.message}</div>
             </g:if>
             <g:hasErrors bean="${branchInstance}">
             <div class="errors">
                 <g:renderErrors bean="${branchInstance}" as="list" />
             </div>
             </g:hasErrors>
-            <g:form controller="branch" action="save" >
-            	<fieldset>
-				
-				<!-- do not forget source for adding to other objects -->
-				<g:if test="${params.source}">
-					<g:hiddenField name="source" value="${params.source}" />
-				</g:if>
-				<g:if test="${params.source_id}">
-					<g:hiddenField name="source_id" value="${params.source_id}" />
-				</g:if>
-				<g:if test="${params.class}">
-					<g:hiddenField name="class" value="${params.class}" />
-				</g:if>
-				<g:if test="${params.dest}">
-					<g:hiddenField name="dest" value="${params.dest}" />
-				</g:if>
-				<g:if test="${params.refDest}">
-					<g:hiddenField name="refDest" value="${params.refDest}" />
-				</g:if>
-            
+            <g:form action="save" >
                 <div class="dialog">
                     <table>
                         <tbody>
                         
-                            <tr class="prop" title="${message(code:'branch.name.hint' , default: 'Name', encodeAs:'HTML')}">
+                            <tr class="prop">
                                 <td valign="top" class="name">
-                                	<label for="name">
-									<g:message code="branch.name.label" default="Name" encodeAs="HTML" />
-                                	</label>
+                                    <label for="name"><g:message code="branch.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: branchInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" maxlength="15" value="${branchInstance?.name}" />
@@ -59,11 +39,10 @@
                         
                         </tbody>
                     </table>
-	                <div class="buttons">
-	                    <span class="button"><g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create', encodeAs:'HTML')}" /></span>
-	                </div>
                 </div>
-                </fieldset>
+                <div class="buttons">
+                    <span class="button"><g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
+                </div>
             </g:form>
         </div>
     </body>

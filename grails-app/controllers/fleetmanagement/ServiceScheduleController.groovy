@@ -1,9 +1,7 @@
 package fleetmanagement
 
 class ServiceScheduleController {
-	
-	
-	
+
 	static allowedMethods = [save: "POST", update: "POST", delete: ['POST','GET']]
 	
 	def index = {

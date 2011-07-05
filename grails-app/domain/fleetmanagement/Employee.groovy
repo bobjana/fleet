@@ -1,13 +1,13 @@
 package fleetmanagement
 
-class Employee {
+class Employee{
 
     String firstName
     String surname
     String idNumber
     String cellPhoneNumber
-    String employeeCode
     Branch branch
+    User user
 
     static constraints = {
         firstName(blank: false, size:3..50)
@@ -15,5 +15,11 @@ class Employee {
         branch(nullable:false)
 //        idNumber(blank:false, unique:true)
         cellPhoneNumber(blank: false, unique: true)
+        user(nullable:true)
     }
+
+    def String fullName = {
+        firstName + " " + surname
+    }
+
 }

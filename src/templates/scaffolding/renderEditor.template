@@ -1,24 +1,4 @@
-<%  
-	cssStyle = (cp ? "style='" + cp.attributes.cssStyle + "' " : "")
-	if (cssStyle == null || cssStyle.indexOf("null")>=0) {
-		cssStyle = ""
-	}
-	readOnlyAttribute = ""
-	disabledAttribute = ""
-	disabledRadioAttribute = ""
-	disabledSelectAttribute = ""
-	if (!cp.editable) {
-		readOnlyAttribute = "readonly=\"readonly\" "
-		disabledAttribute = "disabled=\"disabled\" "
-		// special for radio because of in-string-replacement
-		disabledRadioAttribute = "disabled=\\\"disabled\\\" "
-		// special for select because taglib requires boolean value...argh!
-		disabledSelectAttribute = "disabled=\"true\" "
-	}
-    	
-
-
-	if (property.type == Boolean.class || property.type == boolean.class)
+<%  if (property.type == Boolean.class || property.type == boolean.class)
         out << renderBooleanEditor(domainClass, property)
     else if (Number.class.isAssignableFrom(property.type) || (property.type.isPrimitive() && property.type != boolean.class))
         out << renderNumberEditor(domainClass, property)
@@ -42,52 +22,33 @@
         out << renderByteArrayEditor(domainClass, property)
     else if (property.manyToOne || property.oneToOne)
         out << renderManyToOne(domainClass, property)
-
-
-    // HK changed conditions 
-    else if(property.oneToMany || property.manyToMany) 
-        out << renderOneToMany(domainClass,property)
-
-    // HK at least nbsp for css styling
-    else
-        out << "&nbsp;"
-
+    else if ((property.oneToMany && !property.bidirectional) || (property.manyToMany && property.isOwningSide()))
+        out << renderManyToMany(domainClass, property)
+    else if (property.oneToMany)
+        out << renderOneToMany(domainClass, property)
 
     private renderEnumEditor(domainClass, property) {
-    	isRadio = (cp ? cp.attributes.isRadio : false)
-    	
-    	if (isRadio) {
-    		return "<g:radioGroup id=\"${property.name}\" name=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" labels=\"\${${property.type.name}?.values()}\" values=\"\${${property.type.name}?.values()}\" ${renderNoSelection(property)}>\n" +
-    		
-    				"										<label for=\"${property.name}.\${it.label}\"><g:message code=\"${domainInstance}.${property.name}.\${it.label}\" default=\"\${it.label.toString()}\" encodeAs=\"HTML\"/></label>\n" +
-    		
-    		
-    				"                                        \${it.radio.replace(\"type=\",\"class=\\\"radio\\\" " + disabledRadioAttribute + "type=\").replace(\"name=\", \"id=\\\"${property.name}.\" + it.label + \"\\\" name=\")}&nbsp;&nbsp;&nbsp;\n" +
-    				"                                    </g:radioGroup>"
-        } else {
-    		return "<g:select " + disabledSelectAttribute + "name=\"${property.name}\" from=\"\${${property.type.name}?.values()}\" value=\"\${${domainInstance}?.${property.name}}\" valueMessagePrefix=\"${domainInstance}.${property.name}\" ${renderNoSelection(property)} />"
-    	}
+        return "<g:select name=\"${property.name}\" from=\"\${${property.type.name}?.values()}\" keys=\"\${${property.type.name}?.values()*.name()}\" value=\"\${${domainInstance}?.${property.name}?.name()}\" ${renderNoSelection(property)} />"
     }
 
     private renderStringEditor(domainClass, property) {
         if (!cp) {
-            return "<g:textField " + readOnlyAttribute + cssStyle + " name=\"${property.name}\" value=\"\${${domainInstance}.${property.name}}\" />"
+            return "<g:textField name=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" />"
         }
         else {
             if ("textarea" == cp.widget || (cp.maxSize > 250 && !cp.password && !cp.inList)) {
-                return "<g:textArea " + readOnlyAttribute + "name=\"${property.name}\" cols=\"40\" rows=\"5\" value=\"\${${domainInstance}?.${property.name}}\" />"
+                return "<g:textArea name=\"${property.name}\" cols=\"40\" rows=\"5\" value=\"\${${domainInstance}?.${property.name}}\" />"
             }
             else {
                 if (cp.inList) {
-                    return "<g:select " + disabledSelectAttribute + "name=\"${property.name}\" from=\"\${${domainInstance}.constraints.${property.name}.inList}\" value=\"\${${domainInstance}?.${property.name}}\" valueMessagePrefix=\"${domainClass.propertyName}.${property?.name}\" ${renderNoSelection(property)} />"
+                    return "<g:select name=\"${property.name}\" from=\"\${${domainInstance}.constraints.${property.name}.inList}\" value=\"\${${domainInstance}?.${property.name}}\" valueMessagePrefix=\"${domainClass.propertyName}.${property?.name}\" ${renderNoSelection(property)} />"
                 }
                 else {
                     def sb = new StringBuffer("<g:")
                     cp.password ? sb << "passwordField " : sb << "textField "
                     sb << "name=\"${property.name}\" "
-                    sb << cssStyle
                     if (cp.maxSize) sb << "maxlength=\"${cp.maxSize}\" "
-                    sb << readOnlyAttribute
+                    if (!cp.editable) sb << "readonly=\"readonly\" "
                     sb << "value=\"\${${domainInstance}?.${property.name}}\" />"
                     return sb.toString()
                 }
@@ -96,107 +57,57 @@
     }
 
     private renderByteArrayEditor(domainClass, property) {
-        return "<input " + readOnlyAttribute + cssStyle + " type=\"file\" id=\"${property.name}\" name=\"${property.name}\" />"
+        return "<input type=\"file\" id=\"${property.name}\" name=\"${property.name}\" />"
     }
 
     private renderManyToOne(domainClass,property) {
-    	// handle manyToOne and oneToOne
         if (property.association) {
-            isRadio = (cp ? cp.attributes.isRadio : false)
-        	if (isRadio) {
-        		return "<g:radioGroup name=\"${property.name}.id\" value=\"\${${domainInstance}?.${property.name}?.compositeId}\" labels=\"\${${property.type.name}.list()}\" values=\"\${${property.type.name}.list().compositeId}\" ${renderNoSelection(property)}>\n" +
-        				"                                        \${it.label} \${it.radio.replace(\"type=\",\"class=\\\"radio\\\" " + disabledRadioAttribute + "type=\")}&nbsp;&nbsp;&nbsp;\n" +
-        				"                                    </g:radioGroup>"
-        	} else {
-            	return "<g:select " + disabledSelectAttribute + "id=\"${property.name}\" name=\"${property.name}.id\" from=\"\${${property.type.name}.list().sort()}\" optionKey=\"id\" value=\"\${${domainInstance}?.${property.name}?.compositeId}\" ${renderNoSelection(property)} />"
-            }
+            return "<g:select name=\"${property.name}.id\" from=\"\${${property.type.name}.list()}\" optionKey=\"id\" value=\"\${${domainInstance}?.${property.name}?.id}\" ${renderNoSelection(property)} />"
         }
     }
 
+    private renderManyToMany(domainClass, property) {
+        return "<g:select name=\"${property.name}\" from=\"\${${property.referencedDomainClass.fullName}.list()}\" multiple=\"yes\" optionKey=\"id\" size=\"5\" value=\"\${${domainInstance}?.${property.name}*.id}\" />"
+    }
+
     private renderOneToMany(domainClass, property) {
-    	// handle oneToMany and manyToMany
-        
         def sw = new StringWriter()
         def pw = new PrintWriter(sw)
         pw.println()
-        pw.println "<g:if test=\"\${${domainInstance}?.${property.name}?.size()>0}\" >"
         pw.println "<ul>"
-        pw.println "<g:each in=\"\${${domainInstance}?.${property.name}?.sort()}\" var=\"${property.name[0]}\" >"
-        pw.println "    <li>"
-        if (cp.editable) {
-        	pw.println "      <g:link controller=\"${property.referencedDomainClass.propertyName}\" action=\"show\" id=\"\${${property.name[0]}.compositeId}\">\${${property.name[0]}?.encodeAsHTML()}</g:link>"
-        } else {
-        	pw.println "      \${${property.name[0]}?.encodeAsHTML()}"
-        }
-        pw.println "    </li>"
+        pw.println "<g:each in=\"\${${domainInstance}?.${property.name}?}\" var=\"${property.name[0]}\">"
+        pw.println "    <li><g:link controller=\"${property.referencedDomainClass.propertyName}\" action=\"show\" id=\"\${${property.name[0]}.id}\">\${${property.name[0]}?.encodeAsHTML()}</g:link></li>"
         pw.println "</g:each>"
         pw.println "</ul>"
-		pw.println "</g:if>"
-		
-		def refDest = ""
-        //if (property.manyToMany && property.otherSide) {
-        if (property.otherSide) {
-        	refDest = "'refDest':'${property.otherSide?.name}',"
-		} else {
-			// when will this happen???
-		} 
-		
-		if (cp.editable) {
-			// add new
-			if (property.otherSide) {
-	        	pw.println "<g:link controller=\"${property.referencedDomainClass.propertyName}\" params=\"['class':'${domainClass.fullName}','dest':'${property.name}', 'source_id':${domainInstance}?.compositeId,'source':'${domainClass.propertyName}',${refDest} '${property.otherSide?.name}.id':${domainInstance}?.compositeId]\" action=\"create\">\${message(code: 'default.add.label', args: [message(code: '${property.referencedDomainClass.propertyName}.label', default: '${property.referencedDomainClass.shortName}')], encodeAs='HTML')}</g:link>"
-	        } else {
-	        	// when will this happen???
-	        	pw.println "<g:link controller=\"${property.referencedDomainClass.propertyName}\" action=\"create\" params=\"['class':'${domainClass.fullName}','dest':'${property.name}', 'source_id':${domainInstance}?.compositeId,'source':'${domainClass.propertyName}']\" >\${message(code: 'default.add.label', args: [message(code: '${property.referencedDomainClass.propertyName}.label', default: '${property.referencedDomainClass.shortName}')], encodeAs='HTML')}</g:link>"
-	        }
-		        
-	        // associate
-	        pw.println "<g:if test=\"\${(!${domainInstance}.${property.name} && ${property.referencedDomainClass.fullName}.count()>0) || ((${property.referencedDomainClass.fullName}.count()-${domainInstance}?.${property.name}?.size())>0)}\">"
-			pw.println "<br />"
-			pw.println "<g:link controller=\"${property.referencedDomainClass.propertyName}\" params=\"['source_id':${domainInstance}?.compositeId, 'source':'${domainClass.propertyName}', 'class':'${property.domainClass.fullName}', 'dest':'${property.name}', ${refDest} 'callback':'link']\" action=\"list\" class=\"save\">\${message(code: 'default.associate.label', args: [message(code: '${property.referencedDomainClass.propertyName}.label', default: '${property.referencedDomainClass.shortName}')], encodeAs='HTML')}</g:link>";
-			pw.println "</g:if>"
-	
-			// remove from association, not possible for oneToMany if other side is not optional 
-			if (property.manyToMany || (property.otherSide && property.referencedDomainClass.getPropertyByName(property.otherSide.name).isOptional())) {
-				pw.println "<g:if test=\"\${${domainInstance}?.${property.name} && ${domainInstance}?.${property.name}?.size()>0}\">"
-				pw.println "<br />"
-				pw.println "<g:link controller=\"${property.referencedDomainClass.propertyName}\" params=\"['source_id':${domainInstance}?.compositeId, 'source':'${domainClass.propertyName}', 'class':'${property.domainClass.fullName}', 'dest':'${property.name}', ${refDest} 'callback':'unlink']\" action=\"list\" class=\"delete\">\${message(code: 'default.deassociate.label', args: [message(code: '${property.referencedDomainClass.propertyName}.label', default: '${property.referencedDomainClass.shortName}')], encodeAs='HTML')}</g:link>";
-		        pw.println "</g:if>"
-			}
-		} // if editable
-		
+        pw.println "<g:link controller=\"${property.referencedDomainClass.propertyName}\" action=\"create\" params=\"['${domainClass.propertyName}.id': ${domainInstance}?.id]\">\${message(code: 'default.add.label', args: [message(code: '${property.referencedDomainClass.propertyName}.label', default: '${property.referencedDomainClass.shortName}')])}</g:link>"
         return sw.toString()
     }
 
     private renderNumberEditor(domainClass, property) {
         if (!cp) {
             if (property.type == Byte.class) {
-                return "<g:select name=\"${property.name}\" from=\"\${-128..127}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" ${renderNoSelection(property)}/>"
+                return "<g:select name=\"${property.name}\" from=\"\${-128..127}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" />"
             }
             else {
-                return "<g:textField " + cssStyle + " name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" />"
+                return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" />"
             }
         }
         else {
-            // HK only for < 50 entries to avoid Java heap space error
-            if(cp.range && Math.abs(cp.range.to-cp.range.from)<50) {
-                return "<g:select " + disabledSelectAttribute + "name=\"${property.name}\" from=\"\${${cp.range.from}..${cp.range.to}}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" ${renderNoSelection(property)} />"
+            if (cp.range) {
+                return "<g:select name=\"${property.name}\" from=\"\${${cp.range.from}..${cp.range.to}}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" ${renderNoSelection(property)} />"
             }
             else if (cp.inList) {
-                return "<g:select " + disabledSelectAttribute + "name=\"${property.name}\" from=\"\${${domainInstance}.constraints.${property.name}.inList}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" valueMessagePrefix=\"${domainClass.propertyName}.${property?.name}\" ${renderNoSelection(property)} />"
+                return "<g:select name=\"${property.name}\" from=\"\${${domainInstance}.constraints.${property.name}.inList}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" valueMessagePrefix=\"${domainClass.propertyName}.${property?.name}\" ${renderNoSelection(property)} />"
             }            
-            else if (property.type == Byte.class) {
-                return "<g:select " + disabledSelectAttribute + "name=\"${property.name}\" from=\"\${-128..127}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" ${renderNoSelection(property)}/>"
-			}
             else {
-                return "<g:textField " + readOnlyAttribute + cssStyle + " name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" />"
+                return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" />"
             }
         }
      }
 
     private renderBooleanEditor(domainClass, property) {
         if (!cp) {
-            return "<g:checkBox " + disabledAttribute + "name=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" />"
+            return "<g:checkBox name=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" />"
         }
         else {
             def sb = new StringBuffer("<g:checkBox name=\"${property.name}\" ")
@@ -204,7 +115,6 @@
             cp.attributes.each { k, v ->
                 sb << "${k}=\"${v}\" "
             }
-            sb << disabledAttribute
             sb << "value=\"\${${domainInstance}?.${property.name}}\" />"
             return sb.toString()
         }
@@ -217,30 +127,12 @@
         }
         else {
             if (!cp.editable) {
-                //return "\${${domainInstance}?.${property.name}?.toString()}"
-                
-				dateFormatName = (cp?.attributes ? cp.attributes.dateFormatName : null)
-		    	if (dateFormatName != null) {
-		    		formatString = "formatName=\"" + dateFormatName + "\""
-		    	} else {
-		    		dateFormat = (cp?.attributes ? cp.attributes.dateFormat : null)
-		    		if (dateFormat != null) {
-		    			formatString = "format=\"" + dateFormat + "\""
-		    		} else {
-		    			if (property.type == java.sql.Time.class) { 
-		    				formatString = "format=\"HH:mm:SS\""
-		    			} else {
-							formatString = "format=\"dd.MM.yyyy\""
-						}
-		    		}
-		    	}
-		    	return "<g:formatDate date=\"\${${domainInstance}?.${property.name}}\" ${formatString}/>"
+                return "\${${domainInstance}?.${property.name}?.toString()}"
             }
             else {
                 def sb = new StringBuffer("<g:datePicker name=\"${property.name}\" ")
-                // overwrite default with value from domain class
-                if (cp.attributes.precision) precision = cp.attributes.precision
-
+                if (cp.format) sb << "format=\"${cp.format}\" "
+                if (cp.widget) sb << "widget=\"${cp.widget}\" "
                 cp.attributes.each { k, v ->
                     sb << "${k}=\"${v}\" "
                 }
@@ -252,7 +144,7 @@
 
     private renderSelectTypeEditor(type, domainClass,property) {
         if (!cp) {
-            return "<g:${type}Select " + disabledSelectAttribute + "name=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" />"
+            return "<g:${type}Select name=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" />"
         }
         else {
             def sb = new StringBuffer("<g:${type}Select name=\"${property.name}\" ")
@@ -260,35 +152,23 @@
             cp.attributes.each { k, v ->
                 sb << "${k}=\"${v}\" "
             }
-            sb << disabledSelectAttribute
             sb << "value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} />"
             return sb.toString()
         }
     }
 
     private renderNoSelection(property) {
-    	// noSelection not used for dates, because they are set on current date
-    	// also using long texts whould increase width of the data picker too much
-    	if (property.type == Date.class || property.type == java.sql.Date.class || property.type == java.sql.Time.class) {
-    		return ""
-	    	} else {
-	    	
-	    	// no encodeAsHTML here, because select-TAG will do the encoding
-	        if (property.optional) {
-	            if ((property.manyToOne || property.oneToOne) && (!property.isEnum())) {
-	                return "noSelection=\"['null': message(code:'default.choose.optional', default:'Select optional')]\""
-	            }
-	            else {
-	                return "noSelection=\"['': message(code:'default.choose.optional', default:'Select optional')]\""
-	            }
-	        } else {
-	        	if ((property.manyToOne || property.oneToOne) && (!property.isEnum())) {
-	                return "noSelection=\"['null': message(code:'default.choose.required', default:'Select one')]\""
-	            }
-	            else {
-	                return "noSelection=\"['': message(code:'default.choose.required', default:'Select one')]\""
-	            }
-			}
-		}
+        if (property.optional) {
+            if (property.manyToOne || property.oneToOne) {
+                return "noSelection=\"['null': '']\""
+            }
+            else if (property.type == Date.class || property.type == java.sql.Date.class || property.type == java.sql.Time.class || property.type == Calendar.class) {
+                return "default=\"none\" noSelection=\"['': '']\""
+            }
+            else {
+                return "noSelection=\"['': '']\""
+            }
+        }
+        return ""
     }
 %>
