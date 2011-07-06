@@ -10,12 +10,13 @@ class BootStrap {
 
         def fixture = fixtureLoader.load("Branches")
 
-        def driver = new Driver(branch: fixture.bloemBranch, licenseExpiryDate: new Date(), ptcExpiryDate: new Date(),
+        def driver = new Driver(branch: fixture.bloemBranch, licenseExpiryDate: DateUtils.addDays(new Date(),2),
+                ptcExpiryDate: DateUtils.addDays(new Date(),2),
                 firstName: "Abraham", surname: "Tjokwe", cellPhoneNumber: "0833452283", idNumber: "",
                 active: true)
         validateAndSave(driver)
 
-        def driver2 = new Driver(branch: fixture.bloemBranch, licenseExpiryDate: new Date(), ptcExpiryDate: new Date(),
+        def driver2 = new Driver(branch: fixture.bloemBranch, licenseExpiryDate: DateUtils.addDays(new Date(),2), ptcExpiryDate: DateUtils.addDays(new Date(),2),
                 firstName: "Solomon", surname: "Baana", cellPhoneNumber: "0823452283", idNumber: "",
                 active: true)
         validateAndSave(driver2)

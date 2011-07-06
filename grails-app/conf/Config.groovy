@@ -44,7 +44,7 @@ grails.logging.jul.usebridge = true
 // packages to include in Spring bean scanning
 grails.spring.bean.packages = []
 
-grails.views.javascript.library="jquery"
+//grails.views.javascript.library="jquery"
 
 // set per-environment serverURL stem for creating absolute links
 environments {
@@ -92,19 +92,19 @@ grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'fleetmanageme
 grails.plugins.springsecurity.authority.className = 'fleetmanagement.Role'
 grails.plugins.springsecurity.useBasicAuth = true
 
-grails.plugins.springsecurity.interceptUrlMap = [
-    '/login/**' : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/dashboard/**':  ['ROLE_USER','ROLE_ADMIN'],
-    '/admin/**': ['ROLE_ADMIN'],
-    '/supervisor/**': ['ROLE_ADMIN'],
-    '/driver/**': ['ROLE_ADMIN'],
-    '/user/**': ['ROLE_ADMIN'],
-    '/branch/**': ['ROLE_ADMIN'],
-    '/**': ['IS_AUTHENTICATED_ANONYMOUSLY']
-]
-
-grails.plugins.springsecurity.securityConfigType = grails.plugins.springsecurity.SecurityConfigType.InterceptUrlMap
-grails.plugins.springsecurity.filterChain.chainMap = [
-   '/sessions/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-   '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
-]
+//grails.plugins.springsecurity.interceptUrlMap = [
+//    '/login/**' : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+//    '/dashboard/**':  ['ROLE_USER','ROLE_ADMIN'],
+//    '/admin/**': ['ROLE_ADMIN'],
+//    '/supervisor/**': ['ROLE_ADMIN'],
+//    '/driver/**': ['ROLE_ADMIN'],
+//    '/user/**': ['ROLE_ADMIN'],
+//    '/branch/**': ['ROLE_ADMIN'],
+//    '/**': ['IS_AUTHENTICATED_ANONYMOUSLY']
+//]
+//
+//grails.plugins.springsecurity.securityConfigType = grails.plugins.springsecurity.SecurityConfigType.InterceptUrlMap
+//grails.plugins.springsecurity.filterChain.chainMap = [
+//   '/sessions/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+//   '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
+//]
