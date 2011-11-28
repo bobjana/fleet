@@ -4,22 +4,16 @@
 
     <style type="text/css">
 
-    .inner {
-        -moz-box-shadow: 5px 5px 5px #ccc;
-        -webkit-box-shadow: 5px 5px 5px #ccc;
-        box-shadow: 5px 5px 5px #ccc;
-    }
-
     #login {
         vertical-align: middle;
-        width: 270px;
-        margin: 0px auto;
+        width: 270;
+        margin: 50 auto;
         text-align: left;
         background-color: #ffffff;
     }
 
     .inner td {
-        padding-left: 15px;
+        padding-left: 15;
         background-color: transparent;
     }
 

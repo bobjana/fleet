@@ -54,7 +54,8 @@
                                   <label for="branch"><g:message code="driver.branch.label" default="Branch" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: driverInstance, field: 'branch', 'errors')}">
-                                    <g:select name="branch.id" from="${fleetmanagement.Branch.list()}" optionKey="id" value="${driverInstance?.branch?.id}"  />
+                                    <g:select name="branch.id" from="${fleetmanagement.Branch.list()}"
+                                              noSelection="${['null':'Select One...']}" optionKey="id" value="${driverInstance?.branch?.id}"  />
                                 </td>
                             </tr>
                         
@@ -66,22 +67,13 @@
                                     <g:textField name="cellPhoneNumber" value="${driverInstance?.cellPhoneNumber}" />
                                 </td>
                             </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="user"><g:message code="driver.user.label" default="User" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: driverInstance, field: 'user', 'errors')}">
-                                    <g:select name="user.id" from="${fleetmanagement.User.list()}" optionKey="id" value="${driverInstance?.user?.id}" noSelection="['null': '']" />
-                                </td>
-                            </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="licenseExpiryDate"><g:message code="driver.licenseExpiryDate.label" default="License Expiry Date" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: driverInstance, field: 'licenseExpiryDate', 'errors')}">
-                                    <g:datePicker name="licenseExpiryDate" precision="day" value="${driverInstance?.licenseExpiryDate}"  />
+                                    <gui:datePicker id='licenseExpiryDate' formatString="dd MMM yyyy" value="${driverInstance.licenseExpiryDate}"/>
                                 </td>
                             </tr>
                         
@@ -90,46 +82,10 @@
                                   <label for="ptcExpiryDate"><g:message code="driver.ptcExpiryDate.label" default="Ptc Expiry Date" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: driverInstance, field: 'ptcExpiryDate', 'errors')}">
-                                    <g:datePicker name="ptcExpiryDate" precision="day" value="${driverInstance?.ptcExpiryDate}"  />
+                                    <gui:datePicker id='ptcExpiryDate' name='ptcExpiryDate' formatString="dd MMM yyyy" value="${driverInstance.ptcExpiryDate}"/>
                                 </td>
                             </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="licenseCopy"><g:message code="driver.licenseCopy.label" default="License Copy" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: driverInstance, field: 'licenseCopy', 'errors')}">
-                                    <input type="file" id="licenseCopy" name="licenseCopy" />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="ptcCopy"><g:message code="driver.ptcCopy.label" default="Ptc Copy" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: driverInstance, field: 'ptcCopy', 'errors')}">
-                                    <input type="file" id="ptcCopy" name="ptcCopy" />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="active"><g:message code="driver.active.label" default="Active" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: driverInstance, field: 'active', 'errors')}">
-                                    <g:checkBox name="active" value="${driverInstance?.active}" />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="fullName"><g:message code="driver.fullName.label" default="Full Name" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: driverInstance, field: 'fullName', 'errors')}">
-                                    <g:textField name="fullName" value="${driverInstance?.fullName}" />
-                                </td>
-                            </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="idNumber"><g:message code="driver.idNumber.label" default="Id Number" /></label>

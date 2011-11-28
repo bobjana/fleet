@@ -11,7 +11,7 @@
 }
 
 html, body {
-    background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#000));
+    /*background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#000));*/
     /*background: white;*/
     color: #333;
     font: 11px verdana, arial, helvetica, sans-serif;
@@ -314,7 +314,7 @@ th.desc a {
 .wrapper {
     background-color: white;
     width: 800px;
-    min-height: 100%;
+    /*min-height: 100%;*/
     margin-left: auto;
     margin-right: auto;
     position: relative;
@@ -332,41 +332,9 @@ th.desc a {
 }
 
 .mainBanner {
-    background: transparent url(../images/rpt-header-logo.png) 100% 100% repeat-x;
-    overflow: hidden;
-    margin: 0px;
+    text-align: center;
+    margin: 30;
     padding: 0px;
-}
-
-.mainBannerLogo {
-    float: right;
-}
-
-.mainBannerTitle {
-    float: left;
-    margin-left: 20px;
-    margin-top: 15px;
-}
-
-.mainBanner h1 {
-    font-size: 2em;
-    font-weight: 100;
-    text-align: left;
-    margin: .8em 0 .3em 0;
-}
-
-.dashboard {
-    padding-left: 16px;
-    padding-right: 16px;
-    background-color: #ffffff;
-}
-
-.dashboard table {
-    border: 0px;
-}
-
-.dashboardSection {
-    margin-bottom: 16px;
 }
 
 .sectionHeading {
@@ -390,4 +358,12 @@ th.desc a {
 
 .listControls{
     width:60px;
+}
+
+.datefield input {
+    width: 9em;
+}
+
+.imageContainer{
+        border: 1px solid #ccc;
 }

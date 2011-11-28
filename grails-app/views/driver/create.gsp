@@ -61,7 +61,8 @@
                         <label for="branch"><g:message code="driver.branch.label" default="Branch"/></label>
                     </td>
                     <td valign="top" class="value ${hasErrors(bean: driverInstance, field: 'branch', 'errors')}">
-                        <g:select name="branch.id" from="${fleetmanagement.Branch.list()}" optionKey="id" value="${driverInstance?.branch?.id}"/>
+                        <g:select name="branch.id" from="${fleetmanagement.Branch.list()}" noSelection="${['null':'Select One...']}"
+                              optionKey="id" value="${driverInstance?.branch?.id}"/>
                     </td>
                 </tr>
 
@@ -79,7 +80,7 @@
                         <label for="licenseExpiryDate"><g:message code="driver.licenseExpiryDate.label" default="License Expiry Date"/></label>
                     </td>
                     <td valign="top" class="value ${hasErrors(bean: driverInstance, field: 'licenseExpiryDate', 'errors')}">
-                        <g:datePicker name="licenseExpiryDate" precision="day" value="${driverInstance?.licenseExpiryDate}"/>
+                        <gui:datePicker id='licenseExpiryDate' formatString="dd MMM yyyy" value="${driverInstance.licenseExpiryDate}"/>
                     </td>
                 </tr>
 
@@ -88,7 +89,7 @@
                         <label for="ptcExpiryDate"><g:message code="driver.ptcExpiryDate.label" default="Ptc Expiry Date"/></label>
                     </td>
                     <td valign="top" class="value ${hasErrors(bean: driverInstance, field: 'ptcExpiryDate', 'errors')}">
-                        <g:datePicker name="ptcExpiryDate" precision="day" value="${driverInstance?.ptcExpiryDate}"/>
+                        <gui:datePicker id='ptcExpiryDate' name='ptcExpiryDate' formatString="dd MMM yyyy" value="${driverInstance.ptcExpiryDate}"/>
                     </td>
                 </tr>
 
@@ -107,15 +108,6 @@
                     </td>
                     <td valign="top" class="value ${hasErrors(bean: driverInstance, field: 'ptcCopy', 'errors')}">
                         <input type="file" id="ptcCopy" name="ptcCopy"/>
-                    </td>
-                </tr>
-
-                <tr class="prop">
-                    <td valign="top" class="name">
-                        <label for="active"><g:message code="driver.active.label" default="Active"/></label>
-                    </td>
-                    <td valign="top" class="value ${hasErrors(bean: driverInstance, field: 'active', 'errors')}">
-                        <g:checkBox name="active" value="${driverInstance?.active}"/>
                     </td>
                 </tr>
 
